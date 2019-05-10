@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .parent{
+            display: flex;
+        }
+        .right{
+            margin-left: 20px;
+            flex: 1
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 两列自适应布局是指一列由内容撑开，另一列撑满剩余宽度的布局方式 -->
+    <!-- Flex布局 -->
+   <div class="parent" style="background-color: lightgrey;">
+        <div class="left" style="background-color: lightblue;">
+            <p>left</p>
+        </div>
+        <div class="right" style="background-color: lightgreen;">
+            <p>right</p>
+            <p>right</p>
+        </div>
+    </div>
+</body>

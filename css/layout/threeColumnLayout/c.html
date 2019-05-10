@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .container {
+            /* 确保中间内容可以显示出来，两倍left宽+right宽 */
+            min-width: 600px;
+        }
+
+        .left {
+            float: left;
+            width: 200px;
+            height: 400px;
+            background: red;
+            margin-left: -100%;
+        }
+
+        .center {
+            float: left;
+            width: 100%;
+            height: 500px;
+            background: yellow;
+        }
+
+        .center .inner {
+            margin: 0 200px;
+        }
+
+        .right {
+            float: left;
+            width: 200px;
+            height: 400px;
+            background: blue;
+            margin-left: -200px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 中间列自适应宽度，旁边两侧固定宽度 -->
+    <!-- 双飞翼布局 -->
+    <!-- 多了一层DOM节点树 -->
+    <article class="container">
+        <div class="center">
+            <div class="inner">双飞翼布局</div>
+        </div>
+        <div class="left">
+            <p>left</p>
+        </div>
+        <div class="right">
+            <p>right</p>
+        </div>
+    </article>
+
+    <!-- 圣杯布局是利用父容器的左、右内边距+两个从列相对定位； 双飞翼布局是把主列嵌套在一个新的父级块中利用主列的左、右外边距进行布局调整 -->
+</body>

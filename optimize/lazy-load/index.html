@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lazyload 1</title>
+    <style>
+        img {
+            display: block;
+            margin-bottom: 50px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="assets/loading.gif" data-src="assets/image1.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image2.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image3.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image4.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image5.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image6.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image7.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image8.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image9.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image10.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image11.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image12.jpg" />
+    <img src="assets/loading.gif" data-src="assets/image13.jpg" />
+    <script type="text/javascript">
+        function lazyload() {
+            var images = document.getElementsByTagName('img');
+            var len = images.length;
+            var n = 0;    // 存储图片加载到的位置，避免每次都是从第一张图片开始遍历
+            return function () {
+                var seeHeight = document.documentElement.clientHeight;
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                for (var i = n; i < len; i++) {
+                    if (images[i].offsetTop < seeHeight + scrollTop) {
+                        if (images[i].getAttribute('src') === 'assets/loading.gif') {
+                            images[i].src = images[i].getAttribute('data-src');
+                        }
+                        n = n + 1;
+                    }
+                }
+            }
+        }
+        // 函数节流操作，当一个程序在运行的时候，其他程序全部中断，必须等该程序运行完成后方可运行(指定时间间隔内只会执行一次任务)
+        function throttle(fn, delay, atleast) {
+            let timeout = null;
+            let startTime = new Date();
+            return function () {
+                var curTime = new Date();
+                clearTimeout(timeout);
+                if (curTime - startTime >= atleast) {
+                    fn();
+                    startTime = curTime;
+                } else {
+                    timeout = setTimeout(fn, delay);
+                }
+            }
+        }
+        // 函数防抖操作，任务频繁触发的情况下，只有任务触发的间隔超过指定间隔的时候，任务才会执行
+        function debounce(fn,interval = 300){
+            let timeout = null;
+            return function(){
+                clearTimeout(timeout);
+                timeout = setTimeout(()=>{
+                    fn.apply(this,arguments);
+                },interval)
+            }
+        }
+        var loadImages = lazyload();
+        loadImages();   //初始化
+        // 设置500ms的延迟，和1000ms的间隔，当超过1000ms未触发该函数，则立即执行函数，不然则延迟500ms执行函数
+        window.addEventListener('scroll', throttle(loadImages, 500, 2000), false);
+    </script>
+</body>

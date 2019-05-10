@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .parent{
+            overflow: hidden;
+            zoom: 1;
+        }
+        .left{
+            float: left;
+            margin-right: 20px;
+        }
+        .right{
+            overflow: hidden;
+            zoom: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 两列自适应布局是指一列由内容撑开，另一列撑满剩余宽度的布局方式 -->
+    <!-- 如果是普通的两列布局，浮动+普通元素的margin就可以了 -->
+    <!-- 自适应的两列布局，利用float+overflow:hidden便可以实现，这种办法主要通过overflow触发BFC,而BFC不会重叠浮动元素。由于设置overflow:hidden并不会触发IE6-浏览器的haslayout属性，所以需要设置zoom:1来兼容IE6-浏览器 -->
+    <div class="parent" style="background-color: lightgrey;">
+        <div class="left" style="background-color: lightblue;">
+            <p>left</p>
+        </div>
+        <div class="right" style="background-color: lightgreen;">
+            <p>right</p>
+            <p>right</p>
+        </div>
+    </div>
+</body>
