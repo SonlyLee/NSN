@@ -6,15 +6,17 @@
     <title></title>
     <style>
         .container{
-            overflow: hidden;
+            display: table;
+            width: 100%;
+            table-layout: fixed;
         }
         .left,.right,.content{
-            float: left;
-            margin: 0 10px -9999px 0;
-            padding-bottom: 9999px;
-            background: red;
-            width: 200px;
-            color: #000
+          display: table-cell;
+          width: 200px;
+          border-left: solid 5px currentColor;
+          border-right: solid 5px currentColor;
+          color: #fff;
+          background: #4577dc;
         }
         p{
             padding: 10px;
@@ -24,6 +26,7 @@
 
 <body>
     <!-- 等高布局是指子元素在父元素中高度相等的布局方式 -->
+    <!-- table元素中的table-cell元素默认就是等高的 -->
     <div class="container">
         <div class="left">
             <p>left</p>

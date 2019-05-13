@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .container{
+          width: 960px;
+          margin: 0 auto;
+        }
+        .left{
+            border-right: 220px solid #dfdfdf;
+            position: absolute;
+            width: 740px;
+            height: 800px;
+            background: green;
+        }
+        .right{
+            background: #dfdfdf;
+            margin-left: 740px;
+            position: absolute;
+            height: 800px;
+            width: 220px;
+        }
+        p{
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 等高布局是指子元素在父元素中高度相等的布局方式 -->
+    <!-- 使用边框和绝对定位实现一个假的高度相等列的效果。 -->
+    <div class="container">
+        <div class="left">
+            <p>left</p>
+        </div>
+        <div class="right">
+            <p>right</p>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            /* 高度一层一层继承下来 */
+            height: 100%;
+        }
+
+        .container {
+            min-height: 100%;
+            background: pink;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container .main {
+            padding-bottom: 50px;
+        }
+
+        p {
+            padding-bottom: 50px;
+        }
+
+        .footer {
+            height: 50px;
+            line-height: 50px;
+            background: deeppink;
+            text-align: center;
+            margin-top: -50px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 粘连布局 -->
+    <!-- 有一块内容<main>，当<main>的高康足够长的时候，紧跟在<main>后面的元素<footer>会跟在<main>元素的后面 -->
+    <!-- 当<main>元素比较短的时候(比如小于屏幕的高度),我们期望这个<footer>元素能够“粘连”在屏幕的底部 -->
+    <div class="container">
+        <div class="main">
+            <div class="left">
+                <p>left</p>
+            </div>
+            <div class="content">
+                <p>content</p>
+                <p>等高布局</p>
+            </div>
+            <div class="right">
+                <p>right</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">footer</div>
+</body>
+
+<!-- footer必须是一个独立的结构，与container没有任何嵌套关系 -->
+<!-- container区域的高度通过设置min-height，变为视口高度 -->
+<!-- footer要使用margin为负来确定自己的位置 -->
+<!-- 在main区域需要设置padding-botton，防止负margin导致footer覆盖任何实际内容 -->
