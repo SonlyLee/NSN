@@ -1,0 +1,4 @@
+我飘向北方，啦啦啦这是一段通过fs.writeFile函数写入的内容；
+这是一段通过fs.writeFile函数写入的内容；
+使用fs.appendFile追加文件内容这是一段通过fs.writeFile函数写入的内容；
+使用fs.appendFile追加文件内容入文件数据内入文件

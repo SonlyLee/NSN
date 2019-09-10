@@ -1,0 +1,15 @@
+.home{
+    height: 80vh;
+    transform: rotate(0deg);
+    background: url('./timg.jpg') no-repeat;
+    .h-txt{
+        margin-top: 100px;
+        font-family: 'busong';
+        color: red;
+    }
+}
+
+// 下边这个会被CSS tree shaking过滤掉
+.mm{
+    background: red;
+}
