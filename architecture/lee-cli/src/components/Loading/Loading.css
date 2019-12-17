@@ -1,0 +1,64 @@
+.LoadingContainer {
+  width:100%;
+  height:100%;
+  background: #e6e6e6;
+  opacity: .8;
+}
+
+.loadingPointGroup {
+  position: relative;
+  top: 50%;
+  left: 50%;
+}
+
+.loading-point {
+  display:inline-block;
+  margin-right: 5px;
+  height:10px;
+  width:10px;
+  opacity:0;
+  border-radius:50%;
+  transform:translateX(-300px);
+  background-color:#4b9cdb
+}
+
+.loading-point-1 {
+  animation:k-loadingP 2s infinite
+}
+.loading-point-2 {
+  animation:k-loadingP 2s infinite;
+  animation-delay:.15s
+}
+.loading-point-3 {
+  animation:k-loadingP 2s infinite;
+  animation-delay:.30s
+}
+.loading-point-4 {
+  animation:k-loadingP 2s infinite;
+  animation-delay:.45s
+}
+.loading-point-5 {
+  animation:k-loadingP 2s infinite;
+  animation-delay:.60s
+}
+
+@keyframes k-loadingP {
+  0% {
+    transform: translateY(0)
+  }
+  35% {
+    transform: translateY(0);
+    opacity: .3
+  }
+  50% {
+    transform: translateY(-20px);
+    opacity: .8
+  }
+  70% {
+    transform: translateY(3px);
+    opacity: .8
+  }
+  85% {
+    transform: translateY(-3px)
+  }
+}
