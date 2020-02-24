@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            height: 100px;
+        }
+        #content{
+            display: flex;
+        }
+        #left {
+            background-color: yellowgreen;
+            flex: 0 0 200px;
+        }
+
+        #main {
+            background-color: aqua;
+            flex: 1 1;
+        }
+
+        #right {
+            background-color: orchid;
+            flex: 0 0 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <div id="left">
+        </div>
+        <div id="main">
+        </div>
+        <div id="right">
+        </div>
+    </div>
+</body>
+
+</html>
