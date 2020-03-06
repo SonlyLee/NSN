@@ -128,3 +128,19 @@ Promise.prototype.then = function(onFulillted,onRejected){
     }
 }
 
+
+let a=new Set([1,2,3]);
+let b=new Set([4,3,2]);
+
+// 并集
+var union= [...new Set([...a,...b])];
+console.log(union);
+
+//交集
+let intersect = [...new Set([...a].filter(item => b.has(item)))]
+console.log(intersect)
+
+// 差集
+let difference = [...new Set([...a].filter(item=>!b.has(item)))]
+console.log(difference)
+

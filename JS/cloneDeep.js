@@ -53,3 +53,24 @@ function cloneDeep(source, list) {
     }
     return target
 }
+
+
+
+function deepCopy(source) {
+    if(!source || typeof source !== 'object' ){
+        return
+    }
+    var target = Array.isArray(source) ? [] : {}
+    for(var keys in source){
+        if(source.hasOwnProperty(keys)){
+            if(source[keys] && typeof source[keys] === 'object'){
+                target[keys] = source[keys].constructor === Array ? [] : {}
+                target[keys] = deepCopy(source[keys])
+            }else{
+                target[keys] = source[keys]
+            }
+        }
+    }
+    return target
+}
+

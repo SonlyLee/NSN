@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .close{
+            width: 50px;
+            height: 50px;
+            background: silver;
+            border-radius: 25px;
+            box-shadow: 2px 2px 5px 0px black;
+            cursor: pointer;
+            position: absolute;
+        }
+        .close:hover{
+            background: rebeccapurple;
+        }
+        .close:before{
+            content: '';
+            width: 30px;
+            height: 10px;
+            background: white;
+            transform: rotate(45deg);
+            position: absolute;
+            top: 20px;
+            left: 10px;
+        }
+        .close:after{
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 10px;
+            background: white;
+            transform: rotate(-45deg);
+            top: 20px;
+            left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="close"></div>
+</body>

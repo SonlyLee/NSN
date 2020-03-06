@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>基础 文件上传</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .progress {
+            border: 1px solid #000000;
+            background: violet;
+            width: 500px;
+        }
+
+        .red {
+            background: red;
+            display: block;
+            width: 0%
+        }
+
+        .green {
+            background: greenyellow;
+            display: block
+        }
+
+        .drop-box {
+            width: 400px;
+            height: 300px;
+            background: #cccccc;
+        }
+
+        .over {
+            background: green
+        }
+
+        #progress_line {
+            height: 20px;
+            width: 300px;
+            margin: 10px 0;
+            background: wheat
+        }
+
+        #progress_line span {
+            display: block;
+            height: 20px;
+            width: 0;
+            color: #fff;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>最原始的上传文件操作 - 单文件上传</h1>
+    <h2>使用form表单直接请求，不用js，页面会刷新</h2>
+    <!-- 单个上传 -->
+    <form action="http://localhost:8100/singleFile" method="post" enctype="multipart/form-data">
+        <label for="f1">Choose file to upload</label>
+        <input type="file" id="f1" name="f1">
+        <button type="submit">上传</button>
+    </form>
+    <!-- 多个上传 -->
+    <form method="post" action="http://localhost:8100/multipleFiles" enctype="multipart/form-data">
+
+        选择文件(可多选):
+        <input type="file" name="f1" multiple/>
+        <br/> input 必须设置 name 属性，否则数据无法发送
+        <br/>
+        <br/> 标题：
+        <input type="text" name="title" />
+        <br/>
+        <br/>
+        <br/>
+
+        <button type="submit" id="btn-0">上 传</button>
+
+    </form>
+    <!-- 局部刷新 -->
+    <iframe src="" id="temp-iframe" name="temp-iframe"> </iframe>
+    <form method="post" target="temp-iframe" action="http://localhost:8100/multipleFiles" enctype="multipart/form-data">
+        选择文件(可多选):
+        <input type="file" name="f1" id="f1" multiple/>
+        <br/> input 必须设置 name 属性，否则数据无法发送
+        <br/>
+        <br/> 标题：
+        <input type="text" name="title" />
+        <br/>
+        <br/>
+        <br/>
+
+        <button type="submit" id="btn-0">上 传</button>
+
+    </form>
+
+
+    <!-- 无刷新上传 -->
+    <!-- <div>
+        <p>无刷新上传</p>
+        <input type="file" id="re-fresh" multiple/>
+        <br/>
+        <button type="button" id="btn">上传</button>
+    </div> -->
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <!-- 多文件，单进度 -->
+
+    <div>
+
+        选择文件(可多选):
+        <input type="file" id="re-fresh" multiple/>
+        <br/>
+        <br/>
+        <div id="progress" class="progress">
+            <span class="red">0%</span>
+        </div>
+
+        <button type="button" id="btn">上 传</button>
+
+    </div>
+    <script>
+        // 局部刷新
+        // var iframe = document.getElementById('tem-iframe')
+        // iframe.addEventListener('load', function () {
+        //     var result = iframe.contentWindow.document.body.innerText
+        //     // 接口数据转换为json对象
+        //     var obj = JSON.parse(result)
+        //     if (obj && obj.fileUrl.length) {
+        //         console.log('上传成功')
+        //     }
+        // })
+
+        // 无刷新
+        function submitUpload() {
+            var progressSpan = document.getElementById('progress').firstElementChild
+            var fileList = document.getElementById('re-fresh').files
+            progressSpan.style.width = '0'
+            progressSpan.classList.remove('green')
+            if (!fileList.length) {
+                alert('请选择文件')
+                return
+            }
+            var fd = new FormData()  //构造formData对象
+            // 多个文件上传需要添加到formData对象
+            for (var i = 0; i < fileList.length; i++) {
+                fd.append('name', fileList[i])  //支持多个文件
+            }
+            var xhr = new XMLHttpRequest()
+            xhr.open('POST', 'http://localhost:8100/multipleFiles', true)
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    console.log('上传成功');
+                }
+            }
+            xhr.onprogress = updateProgress
+            xhr.upload.onprogress = updateProgress
+            function updateProgress(event) {
+                console.log(event)
+                if (event.lengthComputable) {
+                    var completedPercent = (event.loaded / event.total * 100).toFixed(2)
+                    progressSpan.style.width = completedPercent + '%'
+                    progressSpan.innerHTML = completedPercent + '%'
+                    if (completedPercent > 90) {  //进度条变为绿色
+                        progressSpan.classList.add('green')
+                    }
+                    console.log('已上传', completedPercent)
+                }
+            }
+            //注意 send 一定要写在最下面，否则 onprogress 只会执行最后一次 也就是100%的时候
+            xhr.send(fd)  // 发送时，content-type默认就是multipart/form-data
+        }
+        //绑定提交事件
+        document.getElementById('btn').addEventListener('click', submitUpload);
+    </script>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <!-- 拖拽上传 -->
+    <h1>拖拽上传</h1>
+    <div class="drop-box" id="drop-box">
+        拖动文件到这里进行开始上传
+    </div>
+    <button tyep="button" id="btn-drop">上传</button>
+    <script>
+        var box = document.getElementById('drop-box')
+
+        // 禁止浏览器的拖放默认行为
+        document.addEventListener('drop', function (e) {
+            console.log('document drop')
+            e.preventDefault()
+        })
+
+        // 设置拖拽事件
+        function openDropEvent() {
+            box.addEventListener('dragover', function (e) {
+                console.log('element dragover')
+                box.classList.add('over')
+                e.preventDefault()
+            })
+            box.addEventListener('dragleave', function (e) {
+                console.log('element dragleave')
+                box.classList.remove('over')
+                e.preventDefault()
+            })
+            box.addEventListener('drop', function (e) {
+                e.preventDefault()  //取消浏览器默认拖拽效果
+                var fileList = e.dataTransfer.files   //获取拖拽中的文件对象
+                var len = fileList.length    //用来获取文件的长度（其实就是获得文件数量）
+
+                // 检测是否是拖拽文件到页面的操作
+                if (!len) {
+                    box.classList.remove('over')
+                    return
+                }
+                box.classList.add('over')
+                window.willUploadFileList = fileList
+            }, false)
+        }
+
+        openDropEvent()
+
+        function submitUpload() {
+            var fileList = window.willUploadFileList || []
+            if (!fileList.length) {
+                console.log('请选择文件')
+                return
+            }
+            var fd = new FormData()   //构建formData对象
+            for (var i = 0; i < fileList.length; i++) {
+                fd.append('name', fileList[i])   //支持多文件上传
+            }
+
+            var xhr = new XMLHttpRequest()    //创建对象
+            xhr.open('POST', 'http://localhost:8100/multipleFiles', true)
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    var obj = JSON.parse(xhr.responseText)
+                    if (obj.fileUrl.length) {
+                        alert('上传成功')
+                    }
+                }
+            }
+            xhr.send(fd)  //发送
+        }
+        // 绑定提交事件
+        document.getElementById('btn-drop').addEventListener('click', submitUpload)
+    </script>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <h1>大文文件分片上传之formData</h1>
+    <div>
+        选择文件：
+        <input type="file" id="big_file">
+        <div id="progress_line">
+            <span class="red">0%</span>
+        </div>
+        <button type="button" id="btn_big_file_submit">上传</button>
+    </div>
+    <script>
+        // 思路概括
+        // 把大文件分成每2m一块进行上传，发送到服务器同事携带一个标志，暂时用当前的时间戳
+        // 服务端说呢过程临时文件，服务端接受一个文件结束的标志，然后将所有的文件进行合并成一个文件，清理临时文件
+        function submitUpload() {
+            var chunkSize = 2 * 1024 * 1024  //2m
+            var progressSpan = document.getElementById('progress_line').firstElementChild;
+            var file = document.getElementById('big_file').files[0]
+
+            var chunks = [],
+                token = (+new Date()),
+                name = file.name,
+                chunkCount = 0,
+                sendChunkCount = 0
+
+            progressSpan.style.width = '0';
+            progressSpan.classList.remove('green');
+            if (!file) {
+                alert('请选择文件')
+                return
+            }
+
+            // 拆分文件
+            if (file.size > chunkSize) {
+                // 拆分文件
+                var start = 0, end = 0
+                while (true) {
+                    end += chunkSize;
+                    var blob = file.slice(start, end)
+                    start += chunkSize
+                    if (!blob.size) {
+                        // 拆分结束
+                        break
+                    }
+                    chunks.push(blob)
+                }
+            } else {
+                chunks.push(file.slice(0))
+            }
+            chunkCount = chunks.length  //分片的个数
+
+            // 获得本地缓存的数据
+            function getUploadedFromStorage() {
+                return JSON.parse(localStorage.getItem(saveChunkKey) || "{}")
+            }
+
+            // 写入缓存
+            function setUploadedToStorage(index) {
+                var obj = getUploadedFromStorage();
+                obj[index] = true
+                localStorage.setItem(saveChunkKey, JSON.stringify(obj))
+            }
+            // 获得已上传的分段信息
+            var uploadedInfo = getUploadedFromStorage()
+
+            // 没有做并发限制，较大文件导致并发过多，tcp 链接被占光 ，需要做下并发控制，比如只有4个在请求在发送
+            for (var i = 0; i < chunkCount; i++) {
+                console.log('index', i, uploadedInfo[i] ? '已上传' : '未上传')
+                if (uploadedInfo[i]) {//对比分段
+                    sendChunkCount = i + 1;//记录已上传的索引
+                    continue;//如果已上传则跳过
+                }
+                var fd = new FormData()
+                fd.append('token', token)
+                fd.append('name', chunks[i])
+                fd.append('index', i)
+                xhrSend(fd, function () {
+                    sendChunkCount += 1
+                    // 将成功信息保存到本地
+                    setUploadedToStorage(i)
+                    if (sendChunkCount === chunkCount) {
+                        console.log('上传完成，发送合并请求')
+                        var formD = new FormData()
+                        formD.append('type', 'merge')
+                        formD.append('token', token)
+                        formD.append('chunkCount', chunkCount)
+                        formD.append('filename', name)
+                        xhrSend(formD)
+                    }
+                })
+            }
+        }
+        function xhrSend(fd, cb) {
+            var progressSpan = document.getElementById('progress_line').firstElementChild;
+            var xhr = new XMLHttpRequest()  //创建对象
+            xhr.open('POST', 'http://localhost:8100/shardProcessing', true)
+            xhr.onreadystatechange = function () {
+                console.log('state change', xhr.readyState)
+                if (xhr.readyState == 4) {
+                    console.log(xhr.responseText)
+                    cb && cb()
+                }
+            }
+            xhr.onprogress = updateProgress
+            xhr.upload.onprogress = updateProgress
+            function updateProgress(event) {
+                console.log(event)
+                if (event.lengthComputable) {
+                    var completedPercent = (event.loaded / event.total * 100).toFixed(2)
+                    progressSpan.style.width = completedPercent + '%';
+                    progressSpan.innerHTML = completedPercent + '%';
+                    if (completedPercent > 90) {//进度条变色
+                        progressSpan.classList.add('green');
+                    }
+                    console.log('已上传', completedPercent);
+                }
+            }
+            //注意 send 一定要写在最下面，否则 onprogress 只会执行最后一次 也就是100%的时候
+            xhr.send(fd);//发送时  Content-Type默认就是: multipart/form-data; 
+        }
+        document.getElementById('btn_big_file_submit').addEventListener('click', submitUpload);
+
+
+    </script>
+</body>
+
+</html>
